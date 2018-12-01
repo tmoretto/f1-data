@@ -40,7 +40,7 @@ public class DataSchedule {
 			logger.error(e.getMessage(), e);
 		}
 		
-		logger.info("Loading F1 Data :: Finished at - {}", dateTimeFormatter.format(LocalDateTime.now()));
+		logger.info("Loading F1 Data :: Finished at: {}", dateTimeFormatter.format(LocalDateTime.now()));
 		
 	}
 	

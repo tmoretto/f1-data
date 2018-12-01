@@ -19,9 +19,19 @@ public class RaceTable implements Serializable {
 	private String id;
 	private Integer season;
 	private Integer round;
-
+	
 	@JsonProperty("Races")
 	private List<Race> races;
+	
+	public RaceTable() {
+	}
+	
+	public RaceTable(Integer season, Integer round) {
+		super();
+		this.season = season;
+		this.round = round;
+	}
+
 
 	public String getId() {
 		return id;

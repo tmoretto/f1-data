@@ -18,7 +18,7 @@ public class Race implements Serializable {
 	@JsonProperty("Circuit")
 	private Circuit circuit;
 	@JsonProperty("Results")
-	private List<Results> results;
+	private List<Result> results;
 
 	public String getRaceName() {
 		return raceName;
@@ -52,11 +52,11 @@ public class Race implements Serializable {
 		this.circuit = circuit;
 	}
 
-	public List<Results> getResults() {
+	public List<Result> getResults() {
 		return results;
 	}
 
-	public void setResults(List<Results> results) {
+	public void setResults(List<Result> results) {
 		this.results = results;
 	}
 
