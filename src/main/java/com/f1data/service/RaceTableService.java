@@ -2,20 +2,14 @@ package com.f1data.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.f1data.domain.RaceTable;
-import com.f1data.repository.RaceTableRepository;
 
-@Service
-public class RaceTableService {
+public interface RaceTableService {
 
-	@Autowired
-	private RaceTableRepository repository;
+	List<RaceTable> findAll();
 
-	public List<RaceTable> findAll() {
-		return repository.findAll();
-	}
+	RaceTable findBySeasonAndRound(int season, int round);
+
+	void saveNewRoundIfApplicable(RaceTable race);
 
 }
