@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.f1data.adapter.F1DataImporter;
 import com.f1data.domain.RaceTable;
+import com.f1data.service.RaceTableService;
 
 @Component
 public class DataSchedule {
@@ -21,11 +22,16 @@ public class DataSchedule {
 	@Autowired
 	private F1DataImporter importer;
 	
+	@Autowired
+	private RaceTableService raceService;
+	
 	@Scheduled(cron = "*/1 */1 * * * *")
 	public void importDataTest() {
 		logger.info("ron Task :: Execution Time - {}", dateTimeFormatter.format(LocalDateTime.now()));
 		RaceTable race = importer.importRaceTable();
 		System.out.println(race);
+		
+		raceService.findAll();
 	}
 	
 	//Todo dia 1:00

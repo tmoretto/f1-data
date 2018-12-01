@@ -3,19 +3,33 @@ package com.f1data.domain;
 import java.io.Serializable;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Document
 public class RaceTable implements Serializable {
 
 	private static final long serialVersionUID = -6293576080882356541L;
-
+	
+	@Id
+	private String id;
 	private Integer season;
 	private Integer round;
 
 	@JsonProperty("Races")
 	private List<Race> races;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public Integer getSeason() {
 		return season;
