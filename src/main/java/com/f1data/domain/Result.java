@@ -95,6 +95,10 @@ public class Result implements Serializable {
 	public void setConstructor(Constructor constructor) {
 		this.constructor = constructor;
 	}
+	
+	public int getPerformance() {
+		return this.grid - this.position;
+	}
 
 	@Override
 	public int hashCode() {

@@ -22,32 +22,6 @@ public class SeasonController {
 
 	@Autowired
 	private RaceTableService service;
-
-//	@GetMapping("/{season}/{round}/results")
-//	public ResponseEntity<RaceTable> findRaceTable(@PathVariable int season, @PathVariable int round) {
-//		RaceTable race = service.findBySeasonAndRound(season, round);
-//		return new ResponseEntity<RaceTable>(race, HttpStatus.OK);
-//	}
-//	
-//	@PostMapping("/{season}/{round}/results")
-//	public ResponseEntity<RaceTable> addRaceTable(@RequestBody Result result, @PathVariable int season, @PathVariable int round) {
-//		service.addResult(new RaceTable(season, round), result);
-//		return new ResponseEntity<RaceTable>(new RaceTable(season, round), HttpStatus.OK);
-//	}
-//
-//	@PutMapping("/{season}/{round}/resuls/{driverId}")
-//	public ResponseEntity<RaceTable> updateResult(@RequestBody Result result, @PathVariable int season, @PathVariable int round, @PathVariable String driverId) {
-//		service.updateResult(new RaceTable(season, round), driverId, result);
-//		return new ResponseEntity<RaceTable>(new RaceTable(season, round), HttpStatus.OK);
-//	}
-//	
-//	@DeleteMapping("/{season}/{round}/disqualify/{driverId}")
-//	public ResponseEntity<Void> disqualifyResult(@PathVariable int season, @PathVariable int round, @PathVariable String driverId) {
-//		service.disqualifyResult(new RaceTable(season, round), driverId);
-//		return ResponseEntity.noContent().build();
-//	}
-
-	
 	
 	@GetMapping("/{season}/rounds/{round}/championship/drivers")
 	public ResponseEntity<RaceTable> getDriversChampionshipTable(@PathVariable int season, @PathVariable int round) {
