@@ -12,9 +12,9 @@ public interface ResultService {
 
 	Result findResultBySeasonAndRoundAndDriver(int season, int round, String driverId);
 
-	Result addDriverResult(int season, int round, Result result);
+	Result addDriverResult(int season, int round, Result result) throws Exception;
 
-	Result updateDriverResult(int season, int round, String driverId, Result result);
+	Result updateDriverResult(int season, int round, String driverId, Result result) throws Exception;
 
 	void removeDriverResult(int season, int round, String driverId);
 	

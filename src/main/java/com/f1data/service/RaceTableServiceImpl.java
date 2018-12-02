@@ -49,7 +49,13 @@ public class RaceTableServiceImpl implements RaceTableService {
 		if (raceTable == null) {
 			this.save(race);
 		}
+	}
 
+	@Override
+	public void removeSeasonRound(int season, int round) {
+		mongoTemplate.remove(new Query(Criteria
+				.where("season").is(season)
+				.and("round").is(round)), RaceTable.class);
 	}
 
 }

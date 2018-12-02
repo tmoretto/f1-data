@@ -53,7 +53,10 @@ public class ResultServiceImpl implements ResultService {
 	}
 	
 	@Override
-	public Result addDriverResult(int season, int round, Result result) {
+	public Result addDriverResult(int season, int round, Result result) throws Exception {
+		if (findResultBySeasonAndRoundAndDriver(season, round, result.getDriver().getDriverId()) != null) {
+			throw new Exception("Driver already in the race result");
+		}
 		RaceTable raceTable = raceTableService.findBySeasonAndRound(season, round);
 		if (raceTable != null) {
 			raceTable.getRaces().get(0).getResults().add(result);
@@ -63,7 +66,10 @@ public class ResultServiceImpl implements ResultService {
 	}
 	
 	@Override
-	public Result updateDriverResult(int season, int round, String driverId, Result result) {
+	public Result updateDriverResult(int season, int round, String driverId, Result result) throws Exception {
+		if (findResultBySeasonAndRoundAndDriver(season, round, driverId) == null) {
+			throw new Exception("Driver not found in the race result");
+		}
 		RaceTable raceTable = raceTableService.findBySeasonAndRound(season, round);
 		if (raceTable != null) {
 			removeDriverResult(driverId, raceTable);

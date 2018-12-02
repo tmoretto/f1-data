@@ -16,5 +16,6 @@ public interface RaceTableService {
 
 	void addNewRoundIfApplicable(RaceTable race);
 
+	void removeSeasonRound(int season, int round);
 	
 }
