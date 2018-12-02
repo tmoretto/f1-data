@@ -23,7 +23,7 @@ public class DataSchedule {
 	private F1DataLoader loader;
 	
 	@Autowired
-	private RaceTableService raceService;
+	private RaceTableService raceTableService;
 	
 	@Scheduled(cron = "0 */5 * * * *")
 	public void importData() {
@@ -31,11 +31,11 @@ public class DataSchedule {
 		
 		try {
 			logger.info("Loading F1 Data :: Looking for new Data ...");
-			RaceTable race = loader.loadRaceTableData();
-			logger.info("Loading F1 Data :: RaceTable found: {}", race);
+			RaceTable raceTable = loader.loadRaceTableData();
+			logger.info("Loading F1 Data :: RaceTable found: {}", raceTable);
 			
 			logger.info("Loading F1 Data :: Saving new Data ... ");
-			raceService.saveNewRoundIfApplicable(race);
+			raceTableService.addNewRoundIfApplicable(raceTable);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
