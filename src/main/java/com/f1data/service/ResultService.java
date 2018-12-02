@@ -2,6 +2,8 @@ package com.f1data.service;
 
 import java.util.List;
 
+import com.f1data.domain.ConstructorChampionship;
+import com.f1data.domain.DriverChampionship;
 import com.f1data.domain.Result;
 
 public interface ResultService {
@@ -15,5 +17,9 @@ public interface ResultService {
 	Result updateDriverResult(int season, int round, String driverId, Result result);
 
 	void removeDriverResult(int season, int round, String driverId);
+	
+	List<DriverChampionship> getDriveChampionship(int season);
+	
+	List<ConstructorChampionship> getConstructorChampionship(int season);
 	
 }

@@ -22,6 +22,12 @@ public class RaceTableServiceImpl implements RaceTableService {
 	}
 	
 	@Override
+	public List<RaceTable> findBySeason(int season) {
+		return mongoTemplate.find(new Query(Criteria
+				.where("season").is(season)), RaceTable.class);
+	}
+	
+	@Override
 	public RaceTable findBySeasonAndRound(int season, int round) {
 		return mongoTemplate.findOne(new Query(Criteria
 				.where("season").is(season)
