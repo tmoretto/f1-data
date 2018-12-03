@@ -27,4 +27,9 @@ public class ConstructorServiceImpl implements ConstructorService {
 				.where("name").is(name)), Constructor.class);
 	}
 
+	@Override
+	public Constructor insert(Constructor constructor) {
+		return mongoTemplate.save(constructor);
+	}
+	
 }

@@ -9,5 +9,7 @@ public interface DriverService {
 	List<Driver> findAll();
 	
 	Driver findById(String driverId);
+
+	Driver insert(Driver driver);
 	
 }

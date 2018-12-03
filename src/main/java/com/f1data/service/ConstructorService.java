@@ -9,5 +9,7 @@ public interface ConstructorService {
 	List<Constructor> findAll();
 	
 	Constructor findByName(String name);
+
+	Constructor insert(Constructor constructor);
 	
 }

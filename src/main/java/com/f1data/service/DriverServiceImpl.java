@@ -26,5 +26,10 @@ public class DriverServiceImpl implements DriverService {
 		return mongoTemplate.findOne(new Query(Criteria
 				.where("driverId").is(driverId)), Driver.class);
 	}
+	
+	@Override
+	public Driver insert(Driver driver) {
+		return mongoTemplate.save(driver);
+	}
 
 }

@@ -41,9 +41,6 @@ public class ResultServiceImpl implements ResultService {
 		.filter(r -> driverId.equalsIgnoreCase(r.getDriver().getDriverId()))
 		.findFirst()
 		.orElse(null);
-		if (result == null) {
-			throw new ResultNotFoundException("Result not found for driver: " + driverId);
-		}
 		return result;
 	}
 	
@@ -52,9 +49,13 @@ public class ResultServiceImpl implements ResultService {
 		if (findResultBySeasonAndRoundAndDriver(season, round, result.getDriver().getDriverId()) != null) {
 			throw new F1DataException("Driver already in the race result: " + new RaceTable(season, round) + " " + result.getDriver());
 		}
+		insertDriver(result);
+		insertConstructor(result);
+
 		RaceTable raceTable = raceTableService.findBySeasonAndRound(season, round);
 		raceTable.getRaces().get(0).getResults().add(result);
 		raceTableService.save(raceTable);
+		
 		return result;
 	}
 	
@@ -116,4 +117,18 @@ public class ResultServiceImpl implements ResultService {
 		raceTable.getRaces().get(0).getResults().removeIf(r -> r.getDriver().getDriverId().equalsIgnoreCase(driverId));
 	}
 	
+	private void insertDriver(Result result) {
+		Driver driver = driverService.findById(result.getDriver().getDriverId());
+		if (driver == null) {
+			driverService.insert(result.getDriver());
+		}
+	}
+
+	private void insertConstructor(Result result) {
+		Constructor constructor = constructorService.findByName(result.getConstructor().getName());
+		if (constructor == null) {
+			constructorService.insert(result.getConstructor());
+		}
+	}
+
 }
