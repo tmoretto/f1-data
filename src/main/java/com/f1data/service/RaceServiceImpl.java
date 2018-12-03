@@ -20,14 +20,12 @@ public class RaceServiceImpl implements RaceService {
 		
 	@Override
 	public Race findRace(int season, int round) {
-		RaceTable raceTable = raceTableService.findBySeasonAndRound(season, round);
-		return raceTable.getRaces().get(0);
+		return raceTableService.findBySeasonAndRound(season, round).getRaces().get(0);
 	}
 
 	@Override
 	public Circuit findRaceCircuit(int season, int round) {
-		RaceTable raceTable = raceTableService.findBySeasonAndRound(season, round);
-		return raceTable.getRaces().get(0).getCircuit();
+		return raceTableService.findBySeasonAndRound(season, round).getRaces().get(0).getCircuit();
 	}
 
 	@Override
@@ -35,7 +33,7 @@ public class RaceServiceImpl implements RaceService {
 		RaceTable raceTable = raceTableService.findBySeasonAndRound(season, round);
 		return raceTable.getRaces().get(0).getResults().stream()
 			.min(Comparator.comparing(Result::getPosition))
-			.get();
+			.orElse(null);
 	}
 
 	@Override
@@ -51,7 +49,7 @@ public class RaceServiceImpl implements RaceService {
 		RaceTable raceTable = raceTableService.findBySeasonAndRound(season, round);
 		return raceTable.getRaces().get(0).getResults().stream()
 			.max(Comparator.comparing(Result::getPerformance))
-			.get();
+			.orElse(null);
 	}
 
 	@Override
@@ -59,13 +57,13 @@ public class RaceServiceImpl implements RaceService {
 		RaceTable raceTable = raceTableService.findBySeasonAndRound(season, round);
 		return raceTable.getRaces().get(0).getResults().stream()
 			.min(Comparator.comparing(Result::getPerformance))
-			.get();
+			.orElse(null);
 	}
 
 	@Override
 	public List<Result> findRaceProblems(int season, int round) {
-		RaceTable raceTable = raceTableService.findBySeasonAndRound(season, round);
-		return raceTable.getRaces().get(0).getResults().stream()
+		return raceTableService.findBySeasonAndRound(season, round)
+				.getRaces().get(0).getResults().stream()
 				.filter(r -> !"Finished".equalsIgnoreCase(r.getStatus()))
 				.collect(Collectors.toList());
 	}

@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.f1data.domain.Constructor;
@@ -17,12 +14,11 @@ import com.f1data.domain.Driver;
 import com.f1data.domain.DriverChampionship;
 import com.f1data.domain.RaceTable;
 import com.f1data.domain.Result;
+import com.f1data.exception.F1DataException;
+import com.f1data.exception.ResultNotFoundException;
 
 @Service
 public class ResultServiceImpl implements ResultService {
-	
-	@Autowired
-	private MongoTemplate mongoTemplate;
 	
 	@Autowired
 	private RaceTableService raceTableService;
@@ -35,57 +31,50 @@ public class ResultServiceImpl implements ResultService {
 	
 	@Override
 	public List<Result> findResultsBySeasonAndRound(int season, int round) {
-		RaceTable raceTable = mongoTemplate.findOne(new Query(Criteria
-				.where("season").is(season)
-				.and("round").is(round)), RaceTable.class);
-		return raceTable.getRaces().get(0).getResults();
+		return raceTableService.findBySeasonAndRound(season, round).getRaces().get(0).getResults();
 	}
 	
 	@Override
 	public Result findResultBySeasonAndRoundAndDriver(int season, int round, String driverId) {
-		RaceTable raceTable = mongoTemplate.findOne(new Query(Criteria
-				.where("season").is(season)
-				.and("round").is(round)), RaceTable.class);
-		return raceTable.getRaces().get(0).getResults().stream()
-			.filter(r -> driverId.equalsIgnoreCase(r.getDriver().getDriverId()))
-			.findFirst()
-			.orElse(null);
+		Result result = raceTableService.findBySeasonAndRound(season, round)
+		.getRaces().get(0).getResults().stream()
+		.filter(r -> driverId.equalsIgnoreCase(r.getDriver().getDriverId()))
+		.findFirst()
+		.orElse(null);
+		if (result == null) {
+			throw new ResultNotFoundException("Result not found for driver: " + driverId);
+		}
+		return result;
 	}
 	
 	@Override
 	public Result addDriverResult(int season, int round, Result result) throws Exception {
 		if (findResultBySeasonAndRoundAndDriver(season, round, result.getDriver().getDriverId()) != null) {
-			throw new Exception("Driver already in the race result");
+			throw new F1DataException("Driver already in the race result: " + new RaceTable(season, round) + " " + result.getDriver());
 		}
 		RaceTable raceTable = raceTableService.findBySeasonAndRound(season, round);
-		if (raceTable != null) {
-			raceTable.getRaces().get(0).getResults().add(result);
-			raceTableService.save(raceTable);
-		}
+		raceTable.getRaces().get(0).getResults().add(result);
+		raceTableService.save(raceTable);
 		return result;
 	}
 	
 	@Override
 	public Result updateDriverResult(int season, int round, String driverId, Result result) throws Exception {
 		if (findResultBySeasonAndRoundAndDriver(season, round, driverId) == null) {
-			throw new Exception("Driver not found in the race result");
+			throw new F1DataException("Driver not found in the race result: " + new RaceTable(season, round));
 		}
 		RaceTable raceTable = raceTableService.findBySeasonAndRound(season, round);
-		if (raceTable != null) {
-			removeDriverResult(driverId, raceTable);
-			raceTable.getRaces().get(0).getResults().add(result);
-			raceTableService.save(raceTable);
-		}
+		removeDriverResult(driverId, raceTable);
+		raceTable.getRaces().get(0).getResults().add(result);
+		raceTableService.save(raceTable);
 		return result;
 	}
 	
 	@Override
 	public void removeDriverResult(int season, int round, String driverId) {
 		RaceTable raceTable = raceTableService.findBySeasonAndRound(season, round);
-		if (raceTable != null) {
-			removeDriverResult(driverId, raceTable);
-			raceTableService.save(raceTable);
-		}
+		removeDriverResult(driverId, raceTable);
+		raceTableService.save(raceTable);
 	}
 	
 	public List<DriverChampionship> getDriveChampionship(int season) {

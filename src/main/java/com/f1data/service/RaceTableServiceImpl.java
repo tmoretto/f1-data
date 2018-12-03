@@ -9,10 +9,14 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.f1data.domain.RaceTable;
+import com.f1data.exception.RaceTableNotFoundException;
 
 @Service
 public class RaceTableServiceImpl implements RaceTableService {
 
+	private static final String ROUND = "round";
+	private static final String SEASON = "season";
+	
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
@@ -23,15 +27,23 @@ public class RaceTableServiceImpl implements RaceTableService {
 	
 	@Override
 	public List<RaceTable> findBySeason(int season) {
-		return mongoTemplate.find(new Query(Criteria
-				.where("season").is(season)), RaceTable.class);
+		List<RaceTable> races = mongoTemplate.find(new Query(Criteria
+				.where(SEASON).is(season)), RaceTable.class);
+		if (races == null || races.isEmpty()) {
+			throw new RaceTableNotFoundException("Races table not found for season: " + season);
+		}
+		return races;
 	}
 	
 	@Override
 	public RaceTable findBySeasonAndRound(int season, int round) {
-		return mongoTemplate.findOne(new Query(Criteria
-				.where("season").is(season)
-				.and("round").is(round)), RaceTable.class);
+		RaceTable raceTable = mongoTemplate.findOne(new Query(Criteria
+				.where(SEASON).is(season)
+				.and(ROUND).is(round)), RaceTable.class);		
+		if (raceTable == null) {
+			throw new RaceTableNotFoundException("Race table not found: " + new RaceTable(season, round));
+		}
+		return raceTable;
 	}
 	
 	@Override
@@ -54,8 +66,8 @@ public class RaceTableServiceImpl implements RaceTableService {
 	@Override
 	public void removeSeasonRound(int season, int round) {
 		mongoTemplate.remove(new Query(Criteria
-				.where("season").is(season)
-				.and("round").is(round)), RaceTable.class);
+				.where(SEASON).is(season)
+				.and(ROUND).is(round)), RaceTable.class);
 	}
 
 }

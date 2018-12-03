@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.f1data.domain.Result;
@@ -46,28 +44,17 @@ public class ResultController {
 
 	@PostMapping
 	@ApiOperation("Add a driver result to the race results")
-	public ResponseEntity<Result> addDriverResult(@RequestBody Result result, @RequestParam int season, @RequestParam int round) {
-		
-		try {
-			Result driverResult = service.addDriverResult(season, round, result);
-			URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/drivers/{driverId}").buildAndExpand(driverResult.getDriver().getDriverId()).toUri();
-			return ResponseEntity.created(uri).build();
-		} catch (Exception e) {
-			 throw new ResponseStatusException(
-			          HttpStatus.BAD_REQUEST, e.getMessage(), e);
-		}
+	public ResponseEntity<Result> addDriverResult(@RequestBody Result result, @RequestParam int season, @RequestParam int round) throws Exception {
+		Result driverResult = service.addDriverResult(season, round, result);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/drivers/{driverId}").buildAndExpand(driverResult.getDriver().getDriverId()).toUri();
+		return ResponseEntity.created(uri).build();
 	}
 
 	@PutMapping("/drivers/{driverId}")
 	@ApiOperation("Modify a driver result to the race results")
-	public ResponseEntity<Result> updateResult(@RequestBody Result result, @RequestParam int season, @RequestParam int round, @PathVariable String driverId) {
-		try {
-			Result driverResult = service.updateDriverResult(season, round, driverId, result);
-			return ResponseEntity.ok().body(driverResult);
-		} catch (Exception e) {
-			 throw new ResponseStatusException(
-			          HttpStatus.BAD_REQUEST, e.getMessage(), e);
-		}
+	public ResponseEntity<Result> updateResult(@RequestBody Result result, @RequestParam int season, @RequestParam int round, @PathVariable String driverId) throws Exception {
+		service.updateDriverResult(season, round, driverId, result);
+		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("/drivers/{driverId}")

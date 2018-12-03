@@ -97,4 +97,9 @@ public class Driver implements Serializable {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Driver [driverId=" + driverId + "]";
+	}
+	
 }
