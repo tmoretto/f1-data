@@ -15,7 +15,6 @@ import com.f1data.domain.DriverChampionship;
 import com.f1data.domain.RaceTable;
 import com.f1data.domain.Result;
 import com.f1data.exception.F1DataException;
-import com.f1data.exception.ResultNotFoundException;
 
 @Service
 public class ResultServiceImpl implements ResultService {

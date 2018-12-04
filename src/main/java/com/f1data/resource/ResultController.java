@@ -23,6 +23,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/result")
+@ApiOperation("Endpoints to find information about and manage results")
 public class ResultController {
 
 	@Autowired
@@ -39,6 +40,9 @@ public class ResultController {
 	@ApiOperation("Return a driver result")
 	public ResponseEntity<Result> findResultBySeasonAndRoundAndDriver(@RequestParam int season, @RequestParam int round, @PathVariable String driverId) {
 		Result driverResult = service.findResultBySeasonAndRoundAndDriver(season, round, driverId);
+		if (driverResult == null) {
+			return ResponseEntity.notFound().build();
+		}
 		return ResponseEntity.ok().body(driverResult);
 	}
 

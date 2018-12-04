@@ -19,6 +19,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/seasons")
+@ApiOperation("Season informations")
 public class SeasonController {
 
 	@Autowired

@@ -57,7 +57,9 @@ public class RaceTableServiceImpl implements RaceTableService {
 			return;
 		}
 		
-		RaceTable raceTable = this.findBySeasonAndRound(race.getSeason(), race.getRound());
+		RaceTable raceTable = mongoTemplate.findOne(new Query(Criteria
+				.where(SEASON).is(race.getSeason())
+				.and(ROUND).is(race.getRound())), RaceTable.class);
 		if (raceTable == null) {
 			this.save(race);
 		}

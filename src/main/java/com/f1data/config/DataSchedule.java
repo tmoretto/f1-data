@@ -24,7 +24,8 @@ public class DataSchedule {
 	
 	@Autowired
 	private RaceTableService raceTableService;
-	
+
+	//0 1 1/1 * * 	//Todo dia 1:00
 	@Scheduled(cron = "0 */5 * * * *")
 	public void importData() {
 		logger.info("Loading F1 Data :: Started at: {}", dateTimeFormatter.format(LocalDateTime.now()));
@@ -44,6 +45,4 @@ public class DataSchedule {
 		
 	}
 	
-	//Todo dia 1:00
-	//0 1 1/1 * *
 }
